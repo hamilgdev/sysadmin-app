@@ -6,8 +6,8 @@ A application with **NextJS**, **NestJS** and, **PostgreSQL**.
 
 - Node.js `20.10.0` or later [👉 Install Node](https://nodejs.org/es/download)
 - NPM [👉 Install npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- Nextjs `14.0.4` or later [👉 Install Next](https://nextjs.org/docs/getting-started)
-- Nestjs `10.0.0` or later [👉 Install Nest](https://docs.nestjs.com/)
+- Nextjs `14*` or later [👉 Install Next](https://nextjs.org/docs/getting-started)
+- Nestjs `10*` or later [👉 Install Nest](https://docs.nestjs.com/)
 - GNU Make `3.81` or later [👉 Install Make](https://www.gnu.org/software/make/)
 
 ### Visual Studio Code
@@ -37,7 +37,7 @@ You can use the `.env.template` file to create your `.env` file. This file is us
 5. Using the **Makefile** of the root `/` of the project, run the following command to initialize installing the dependencies of **frontend** and **backend** the application:
 
     - ```bash
-      make app.init
+      make app.init_dev
       ```
 
 6. Initialize the `@prisma/client` with the following command:
@@ -72,19 +72,19 @@ Run the containers
 Or you can run the **frontend** container with one command
 
 ```bash
-  make frontend.start
+  make frontend.start_dev
 ```
 
 Or you can run the **backend** container with one command
 
 ```bash
-  make backend.start
+  make backend.start_dev
 ```
 
 Also you can run the **database** container with one command
 
 ```bash
-  make database.start
+  make database.start_dev
 ```
 
 ## 🚀 Running the implementation
