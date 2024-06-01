@@ -33,7 +33,7 @@ services:
     networks:
       - main
     volumes:
-      - ./backend:/var/www/sysadmin-app
+      - ./backend:/usr/src/app
 
   # database:
   #   image: postgres:15.3

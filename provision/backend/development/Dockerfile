@@ -4,8 +4,7 @@ ARG NODE_VERSION=20.10.0
 FROM node:${NODE_VERSION}-alpine AS base
 
 # Set working directory
-ENV APP_HOME /var/www/sysadmin-app
-RUN mkdir -p $APP_HOME
+ENV APP_HOME /usr/src/app
 WORKDIR $APP_HOME
 
 COPY . .
