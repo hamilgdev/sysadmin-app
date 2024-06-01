@@ -6,9 +6,9 @@ FROM node:${NODE_VERSION}-alpine AS build-image
 # Set working directory
 ENV APP_HOME /app
 WORKDIR $APP_HOME
+
 COPY package.json package-lock.json ./
 # install dependencies
-RUN npm install -g npm@10.8.1
 RUN npm ci
 COPY . .
 # build

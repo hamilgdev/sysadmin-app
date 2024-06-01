@@ -30,6 +30,6 @@ RUN npm ci --only=production && npm cache clean --force
 COPY . .
 
 # Copy the bundled code
-COPY --from=base /usr/src/app/dist ./dist
+COPY --from=base $APP_HOME/dist ./dist
 
-CMD [ "node", "dist/main.js" ]
+CMD [ "node", "dist/src/main.js" ]

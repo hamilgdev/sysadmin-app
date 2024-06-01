@@ -110,8 +110,10 @@ backend.multi_platform.build_prod:
 # -------------------------🗄️ DATABASE-------------------------
 
 database.start_dev:
-	docker compose run --rm --name host-stack-database \
-	--no-deps --service-ports database ; docker compose down database
+	docker compose -f docker-compose.dev.yml run \
+	--rm --name host-sysadmin-app-database \
+	--no-deps --service-ports database \
+	; docker compose -f docker-compose.dev.yml down database
 
 database.stop_dev:
 	docker compose stop database
