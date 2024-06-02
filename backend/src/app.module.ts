@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { EnvConfig } from '@/src/config/env.config';
+import { EnvConfig } from '@/src/config';
 import { UsersModule } from './modules/users/users.module';
+import { CommonModule } from '@/src/common/common.module';
 
 @Module({
   imports: [
@@ -11,8 +10,9 @@ import { UsersModule } from './modules/users/users.module';
       load: [EnvConfig],
     }),
     UsersModule,
+    CommonModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
