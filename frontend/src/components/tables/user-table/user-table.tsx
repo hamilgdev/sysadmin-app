@@ -12,6 +12,7 @@ import {
   TableRow,
   TableSkeleton,
   BasicDialog,
+  TablePlaceholder,
 } from '@/components';
 import { TrashIcon, Pencil2Icon, ReloadIcon } from '@radix-ui/react-icons';
 import { DateFormats } from '@/constant';
@@ -40,9 +41,16 @@ export function UserTable({
 
   if (onAirTableData) return <TableSkeleton />;
 
+  if (!onAirTableData && !tableData.length)
+    return (
+      <TablePlaceholder
+        title='No data found.'
+        description='There are no users available to display.'
+      />
+    );
+
   const onConfirmDelete = async () => {
     if (!selectedUser) return;
-
     handleDeleteUser(selectedUser.guid);
   };
 
