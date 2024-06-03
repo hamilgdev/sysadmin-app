@@ -1,1 +1,1 @@
-export * from './basic-dialog/basic-dialog'
+export * from './basic-alert-dialog/basic-alert-dialog'

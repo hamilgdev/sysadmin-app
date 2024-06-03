@@ -51,7 +51,7 @@ export async function updateUser({
   const url = `${endpoint}/${guid}`;
   const data = { email, last_name, name };
 
-  return await usersApi.put(url, data)
+  return await usersApi.patch(url, data)
 }
 
 export async function deleteUser({

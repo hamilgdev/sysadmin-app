@@ -7,36 +7,33 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-  Button,
 } from '@/components';
 
 interface BasicDialogProps {
   title: string;
   description?: string;
   isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  onOpenChange: (value: boolean) => void;
   onConfirm?: () => void;
   onCancel?: () => void;
 }
 
-export const BasicDialog = ({
+export const BasicAlertDialog = ({
   title,
   description,
   isOpen,
-  setIsOpen,
+  onOpenChange,
   onConfirm,
-  onCancel,
 }: BasicDialogProps) => {
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

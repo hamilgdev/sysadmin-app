@@ -11,15 +11,16 @@ import {
   TableHeader,
   TableRow,
   TableSkeleton,
-  BasicDialog,
+  BasicAlertDialog as UserDeleteAlertDialog,
   TablePlaceholder,
+  UserUpdateDialog,
 } from '@/components';
 import { TrashIcon, Pencil2Icon, ReloadIcon } from '@radix-ui/react-icons';
 import { DateFormats } from '@/constant';
 import { dateFormatHandler } from '@/handlers';
 import { User } from '@/interfaces';
 import { useState } from 'react';
-import { useDeleteUser } from '@/hooks';
+import { useDeleteUser, useUpdateUser } from '@/hooks';
 
 interface UserTableProps {
   tableData: User[];
@@ -33,10 +34,17 @@ export function UserTable({
   dataRefresher,
 }: UserTableProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
 
   const { handleDeleteUser, loading: isLoadingDelete } = useDeleteUser({
     refetch: dataRefresher,
+  });
+
+  const { handleUpdateUser, loading: isLoadingUpdate } = useUpdateUser({
+    refetch: dataRefresher,
+    onClose: setIsOpenUpdateDialog,
   });
 
   if (onAirTableData) return <TableSkeleton />;
@@ -49,12 +57,37 @@ export function UserTable({
       />
     );
 
-  const onConfirmDelete = async () => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedUser((prev) => {
+      if (!prev) return null;
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const onCloseDeleteDialog = () => {
+    setIsOpenDeleteDialog((prev) => !prev);
+    if (selectedUser) setSelectedUser(null);
+  };
+
+  const onCloseUpdateDialog = () => {
+    setIsOpenUpdateDialog((prev) => !prev);
+    if (selectedUser) setSelectedUser(null);
+  };
+
+  const onConfirmDelete = () => {
     if (!selectedUser) return;
     handleDeleteUser(selectedUser.guid);
   };
 
-  const handleEdit = (id: string) => {};
+  const onConfirmUpdate = () => {
+    if (!selectedUser) return;
+
+    handleUpdateUser(selectedUser.guid, {
+      name: selectedUser.name.trim(),
+      last_name: selectedUser.last_name.trim(),
+      email: selectedUser.email.trim(),
+    });
+  };
 
   return (
     <>
@@ -83,7 +116,14 @@ export function UserTable({
               </TableCell>
               <TableCell className='text-right'>
                 <div className='flex gap-2 justify-end'>
-                  <Button variant='outline' size='icon'>
+                  <Button
+                    variant='outline'
+                    size='icon'
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setIsOpenUpdateDialog(true);
+                    }}
+                  >
                     <Pencil2Icon className='h-4 w-4' />
                   </Button>
                   <Button
@@ -117,13 +157,21 @@ export function UserTable({
         </TableFooter>
       </Table>
 
-      <BasicDialog
+      <UserDeleteAlertDialog
         title='Delete User'
         description='Are you sure you want to delete this user?'
         isOpen={isOpenDeleteDialog}
-        setIsOpen={setIsOpenDeleteDialog}
+        onOpenChange={onCloseDeleteDialog}
         onConfirm={onConfirmDelete}
-        onCancel={() => {}}
+      />
+
+      <UserUpdateDialog
+        user={selectedUser}
+        isOpen={isOpenUpdateDialog}
+        isLoading={isLoadingUpdate}
+        onOpenChange={onCloseUpdateDialog}
+        onChange={onChange}
+        onConfirm={onConfirmUpdate}
       />
     </>
   );

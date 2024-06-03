@@ -1,7 +1,7 @@
 import { GetUsersParams, User } from "@/interfaces";
-import { deleteUser, getUsers } from "@/services";
+import { deleteUser, getUsers, updateUser } from "@/services";
 import { HttpStatusCode } from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import toastify from '@/lib/notifications/toastify';
 
 interface UseSearchUsersReturn {
@@ -83,4 +83,47 @@ export function useDeleteUser({
   }
 
   return { loading, error, handleDeleteUser }
+}
+
+interface UseUpdateUserReturn {
+  loading: boolean;
+  error: string | null;
+  handleUpdateUser: (guid: string, data: any) => void;
+}
+
+export function useUpdateUser({
+  refetch,
+  onClose
+}: {
+  refetch: () => Promise<void>
+  onClose: Dispatch<SetStateAction<boolean>>
+}): UseUpdateUserReturn {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleUpdateUser = useCallback(async (guid: string, data: {
+    name: string;
+    last_name: string;
+    email: string;
+  }) => {
+    try {
+      setLoading(true);
+
+      const response = await updateUser({ params: { guid, ...data } });
+      if (response.status === HttpStatusCode.Ok) {
+        const { user } = response.data;
+
+        await refetch();
+        setLoading(false);
+        onClose((prev) => !prev);
+        toastify(`User ${user.email} updated successfully!`, 'success');
+      }
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [refetch, onClose])
+
+  return { loading, error, handleUpdateUser }
 }
