@@ -1,5 +1,5 @@
 import { GetUsersParams, User } from "@/interfaces";
-import { deleteUser, getUsers, updateUser } from "@/services";
+import { createUser, deleteUser, getUsers, updateUser } from "@/services";
 import { HttpStatusCode } from "axios";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import toastify from '@/lib/notifications/toastify';
@@ -31,7 +31,6 @@ export function useSearchUsers({
       if (response.status === HttpStatusCode.Ok) {
         const { users } = response.data;
         setUsers(users);
-        setLoading(false);
       }
     } catch (error: any) {
       setError(error);
@@ -45,6 +44,49 @@ export function useSearchUsers({
   }, [handleGetUsers])
 
   return { users, loading, error, handleGetUsers }
+}
+
+
+interface UseCreateUserReturn {
+  loading: boolean;
+  error: string | null;
+  handleCreateUser: (data: any) => void;
+}
+
+export function useCreateUser({
+  refetch,
+  onClose
+}: {
+  refetch: () => Promise<void>
+  onClose: Dispatch<SetStateAction<boolean>>
+}): UseCreateUserReturn {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCreateUser = async (data: {
+    name: string;
+    last_name: string;
+    email: string;
+  }) => {
+    try {
+      setLoading(true);
+
+      const response = await createUser({ params: data });
+      if (response.status === HttpStatusCode.Created) {
+        const { user } = response.data;
+
+        await refetch();
+        onClose((prev) => !prev);
+        toastify(`User ${user.email} created successfully!`, 'success');
+      }
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, handleCreateUser }
 }
 
 interface UseDeleteUserReturn {
@@ -72,7 +114,6 @@ export function useDeleteUser({
         const { user } = response.data;
 
         await refetch();
-        setLoading(false);
         toastify(`User ${user.email} deleted successfully!`, 'success');
       }
     } catch (error: any) {
@@ -114,7 +155,6 @@ export function useUpdateUser({
         const { user } = response.data;
 
         await refetch();
-        setLoading(false);
         onClose((prev) => !prev);
         toastify(`User ${user.email} updated successfully!`, 'success');
       }

@@ -21,7 +21,7 @@ export function UserUpdateDialog({
 }: UserUpdateDialogProps) {
   return (
     <BasicDialog
-      title='Update User'
+      title='Update user'
       description='Update the user information and save the changes.'
       isOpen={isOpen}
       onOpenChange={onOpenChange}
