@@ -14,24 +14,41 @@ import {
   BasicAlertDialog as UserDeleteAlertDialog,
   TablePlaceholder,
   UserUpdateDialog,
+  BasicSelect,
 } from '@/components';
-import { TrashIcon, Pencil2Icon, ReloadIcon } from '@radix-ui/react-icons';
+import {
+  TrashIcon,
+  Pencil2Icon,
+  ReloadIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@radix-ui/react-icons';
 import { DateFormats } from '@/constant';
 import { dateFormatHandler } from '@/handlers';
-import { User } from '@/interfaces';
+import { Metadatos, User } from '@/interfaces';
 import { useState } from 'react';
 import { useDeleteUser, useUpdateUser } from '@/hooks';
 
 interface UserTableProps {
   tableData: User[];
+  metadata: Metadatos;
   dataRefresher: () => Promise<void>;
+  currentPage: number;
+  rowsPerPage: string;
   onAirTableData: boolean;
+  onChangePage: (newPage: number) => void;
+  onChangeRowsPerPage: (event: any) => void;
 }
 
 export function UserTable({
   onAirTableData,
   tableData,
   dataRefresher,
+  onChangePage,
+  metadata,
+  onChangeRowsPerPage,
+  currentPage,
+  rowsPerPage,
 }: UserTableProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -88,6 +105,8 @@ export function UserTable({
       email: selectedUser.email.trim(),
     });
   };
+
+  const indexOfLastRow = currentPage * parseInt(rowsPerPage);
 
   return (
     <>
@@ -151,8 +170,41 @@ export function UserTable({
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className='text-right'>$2,500.00</TableCell>
+            <TableCell className='flex gap-2'>
+              <Button
+                variant='outline'
+                size='icon'
+                onClick={() => onChangePage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeftIcon className='h-4 w-4' />
+              </Button>
+              <Button
+                variant='outline'
+                size='icon'
+                onClick={() => onChangePage(currentPage + 1)}
+                disabled={indexOfLastRow >= metadata.total}
+              >
+                <ChevronRightIcon className='h-4 w-4' />
+              </Button>
+            </TableCell>
+            <TableCell colSpan={3}>
+              <span>
+                Page: {metadata.page} of {metadata.last_page}
+              </span>
+            </TableCell>
+            <TableCell className='flex items-center gap-2 text-right justify-end'>
+              <span>Rows per page:</span>
+              <BasicSelect
+                value={rowsPerPage}
+                onChange={onChangeRowsPerPage}
+                options={[
+                  { label: '10', value: '10' },
+                  { label: '15', value: '15' },
+                  { label: '20', value: '20' },
+                ]}
+              />
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>

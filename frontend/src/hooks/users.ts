@@ -1,4 +1,4 @@
-import { GetUsersParams, User } from "@/interfaces";
+import { GetUsersParams, Metadatos, User } from "@/interfaces";
 import { createUser, deleteUser, getUsers, updateUser } from "@/services";
 import { HttpStatusCode } from "axios";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import toastify from '@/lib/notifications/toastify';
 
 interface UseSearchUsersReturn {
   users: User[];
+  metadata: Metadatos;
   loading: boolean;
   handleGetUsers: () => Promise<void>;
   error: string | null;
@@ -19,18 +20,26 @@ export function useSearchUsers({
   limit?: number;
 }): UseSearchUsersReturn {
   const [users, setUsers] = useState<User[]>([]);
+  const [metadata, setMetadata] = useState<Metadatos>({
+    total: 0,
+    page: 0,
+    last_page: 0
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const handleGetUsers = useCallback(async () => {
     try {
+      setLoading(true);
+
       const params: GetUsersParams = { offset, limit }
 
       const response = await getUsers({ params });
 
       if (response.status === HttpStatusCode.Ok) {
-        const { users } = response.data;
+        const { users, metadatos } = response.data;
         setUsers(users);
+        setMetadata(metadatos);
       }
     } catch (error: any) {
       setError(error);
@@ -43,7 +52,7 @@ export function useSearchUsers({
     handleGetUsers();
   }, [handleGetUsers])
 
-  return { users, loading, error, handleGetUsers }
+  return { users, metadata, loading, error, handleGetUsers }
 }
 
 
