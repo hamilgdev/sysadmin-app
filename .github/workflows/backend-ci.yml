@@ -1,0 +1,35 @@
+name: Backend CI # Workflow name
+
+on: # Trigger on push and pull requests
+  push:
+    branches: ['**'] # Trigger on all branches
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build: # Job name
+    runs-on: ubuntu-latest
+
+    steps: # Steps to run in the job
+      - name: 👀 Check out repository
+        uses: actions/checkout@v3 # Use the checkout action to check out the repository code
+
+      - name: 🧩 Set up Node.js
+        uses: actions/setup-node@v4 # Use the setup-node action to set up Node.js
+        with:
+          node-version: '20'
+
+      - name: 📦 Install dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: 🏗️ Build Next.js application
+        run: |
+          cd backend
+          npm run build
+
+      - name: 🫧 Run basic checks
+        run: |
+          cd backend
+          npm run lint
