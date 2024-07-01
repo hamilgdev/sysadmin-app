@@ -45,7 +45,7 @@ export const DashboardSection = () => {
   const onConfirmCreate = () => {
     const { email, last_name, name } = formData;
     if (!email || !last_name || !name) {
-      setError('All fields are required.');
+      setError('Fields are required.');
       return;
     }
     handleCreateUser(formData);
