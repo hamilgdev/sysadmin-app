@@ -6,11 +6,15 @@ on: # Trigger on push and pull requests
     # branches:
     # - main
     # - develop
+    paths:
+      - 'frontend/**'
   pull_request:
     branches: ['**']
     # branches:
     #   - main
     #   - develop
+    paths:
+      - 'frontend/**'
 
 jobs:
   build: # Job name
