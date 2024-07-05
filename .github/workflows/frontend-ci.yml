@@ -10,7 +10,7 @@ on: # Trigger on push and pull requests
       - 'frontend/**'
   pull_request:
     branches: ['**']
-    types: [opened, reopened]
+    # types: [opened, reopened]
     # branches:
     #   - main
     #   - develop
