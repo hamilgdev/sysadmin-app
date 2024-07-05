@@ -23,6 +23,15 @@ jobs:
         with:
           node-version: '20'
 
+      - name: 🕋 Cache Node.js modules
+        uses: actions/cache@v2 # Use the cache action to cache Node.js modules
+        with:
+          path: backend/node_modules # Ruta a la carpeta de dependencias
+          key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }} # Clave única basada en el archivo de dependencias
+          # Prefijo para restaurar cachés parciales
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: 📦 Install dependencies
         run: |
           cd backend
