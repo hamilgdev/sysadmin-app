@@ -72,9 +72,9 @@ export const DashboardSection = () => {
       <section className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
         <div className='flex justify-between items-center mb-4'>
           <div className='flex flex-col gap-2'>
-            <h2 className='text-BASE font-bold text-gray-800'>
-              Management System
-            </h2>
+            <h1 className='text-BASE font-bold text-gray-800'>
+              User Management System
+            </h1>
             <p
               className='text-sm text-gray-500'
               aria-label='Description of the section'
