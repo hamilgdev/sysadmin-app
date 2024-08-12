@@ -7,22 +7,35 @@ on: # Trigger on push and pull requests
       - 'frontend/**'
   pull_request:
     branches: ['**']
+    types: [opened, synchronize]
     paths:
       - 'frontend/**'
 
 jobs:
-  build: # Job name
-    runs-on: ubuntu-latest
+  avoid_redundancy:
+    runs-on: ubuntu-22.04
+    permissions:
+      actions: write
 
-    steps: # Steps to run in the job
+    steps:
+      - name: 🔰 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action
+        with:
+          access_token: ${{ github.token }}
+
+  lint-check:
+    runs-on: ubuntu-22.04
+
+    steps:
       - name: 👀 Check out repository
         uses: actions/checkout@v3 # Use the checkout action to check out the repository code
-        # with:
-        #   ref: ${{ github.event.pull_request.head.sha }} # Check out the PR branch
+        with:
+          fetch-depth: 0
 
       - name: 🧩 Set up Node.js
         uses: actions/setup-node@v4 # Use the setup-node action to set up Node.js
         with:
+          # cache: 'npm'
           node-version: '20'
 
       - name: 🕋 Cache Node.js modules
@@ -37,21 +50,56 @@ jobs:
       - name: 📦 Install dependencies
         run: |
           cd frontend
-          npm install
+          npm ci
+
+      - name: 🔍 Lint check
+        run: |
+          cd frontend
+          npm run lint
+
+  build: # Job name
+    runs-on: ubuntu-22.04
+
+    steps: # Steps to run in the job
+      - name: 👀 Check out repository
+        uses: actions/checkout@v3
+        # with:
+        #   ref: ${{ github.event.pull_request.head.sha }} # Check out the PR branch
+
+      - name: 🧩 Set up Node.js
+        uses: actions/setup-node@v4 # Use the setup-node action to set up Node.js
+        with:
+          # cache: 'npm'
+          node-version: '20'
+
+      - name: 🕋 Cache Node.js modules
+        uses: actions/cache@v3 # Use the cache action to cache Node.js modules
+        with:
+          path: frontend/node_modules # Ruta a la carpeta de dependencias
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }} # Clave única basada en el archivo de dependencias
+          # Prefijo para restaurar cachés parciales
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci
 
       - name: 🏗️ Build Next.js application
         run: |
           cd frontend
           npm run build
 
-      - name: 🫧 Run basic checks
-        run: |
-          cd frontend
-          npm run lint
+      # - name: 📤 Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: dist
+      #     path: public/
 
   run-tests:
-    runs-on: ubuntu-latest
-    needs: build
+    runs-on: ubuntu-22.04
+    needs: [lint-check, build]
     timeout-minutes: 30
 
     steps:
@@ -75,7 +123,7 @@ jobs:
       - name: 📦 Install dependencies
         run: |
           cd frontend
-          npm install
+          npm ci
 
       - name: 🧪 Run tests
         run: |
