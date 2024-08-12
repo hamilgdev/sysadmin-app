@@ -1,4 +1,5 @@
 [![Frontend CI](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/frontend-ci.yml)
+[![Backend CI](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/backend-ci.yml)
 
 # Sysadmin App
 
