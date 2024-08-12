@@ -7,12 +7,58 @@ on: # Trigger on push and pull requests
       - 'backend/**'
   pull_request:
     branches: ['**']
+    types: [opened, synchronize]
     paths:
       - 'backend/**'
 
 jobs:
+  avoid_redundancy:
+    runs-on: ubuntu-22.04
+    permissions:
+      actions: write
+
+    steps:
+      - name: 🔰 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+  lint-check:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: 👀 Check out repository
+        uses: actions/checkout@v3 # Use the checkout action to check out the repository code
+        with:
+          fetch-depth: 0
+
+      - name: 🧩 Set up Node.js
+        uses: actions/setup-node@v4 # Use the setup-node action to set up Node.js
+        with:
+          # cache: 'npm'
+          node-version: '20'
+
+      - name: 🕋 Cache Node.js modules
+        uses: actions/cache@v3 # Use the cache action to cache Node.js modules
+        with:
+          path: backend/node_modules # Ruta a la carpeta de dependencias
+          key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }} # Clave única basada en el archivo de dependencias
+          # Prefijo para restaurar cachés parciales
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 📦 Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: 🔍 Lint check
+        run: |
+          cd backend
+          npm run lint 
+
   build: # Job name
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps: # Steps to run in the job
       - name: 👀 Check out repository
@@ -42,7 +88,41 @@ jobs:
           cd backend
           npm run build
 
-      - name: 🫧 Run basic checks
+      # - name: 📤 Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: dist
+      #     path: private/
+
+  run-tests:
+    runs-on: ubuntu-22.04
+    needs: [lint-check, build]
+    timeout-minutes: 30
+
+    steps:
+      - name: 👀 Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: 🧩 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 🕋 Cache Node.js modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }}
+
+      - name: 📦 Install dependencies
         run: |
           cd backend
-          npm run lint
+          npm ci
+
+      - name: 🧪 Run tests
+        run: |
+          cd backend
+          npm run test
