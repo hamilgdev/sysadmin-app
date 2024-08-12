@@ -1,3 +1,5 @@
+[![Frontend CI](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/frontend-ci.yml)
+
 # Sysadmin App
 
 A application with **NextJS**, **NestJS** and, **PostgreSQL**.
