@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ github.workspace }}/.next
+          path: ${{ github.workspace }}/frontend/.next
 
   # build-docker-image:
   #   runs-on: ubuntu-22.04
