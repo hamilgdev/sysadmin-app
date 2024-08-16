@@ -62,6 +62,10 @@ jobs:
         run: |
           cd frontend
           npm run build
+          ls -la
+
+      - run: |
+          ls -la
 
       - name: 📤 Upload artifact
         uses: actions/upload-artifact@v4
