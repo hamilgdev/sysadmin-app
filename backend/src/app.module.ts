@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EnvConfig } from '@/src/config';
-import { UsersModule } from './modules/users/users.module';
 import { CommonModule } from '@/src/common/common.module';
+import { UsersModule } from './modules/users/users.module';
 import { SeedModule } from './modules/seed/seed.module';
+import { HealthyModule } from './modules/healthy/healthy.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SeedModule } from './modules/seed/seed.module';
     UsersModule,
     CommonModule,
     SeedModule,
+    HealthyModule,
   ],
   controllers: [],
   providers: [],

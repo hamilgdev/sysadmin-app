@@ -1,6 +1,13 @@
+[![Frontend CI](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/frontend-ci.yml)
+[![Backend CI](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/Nesty-Apps/sysadmin-app/actions/workflows/backend-ci.yml)
+
 # Sysadmin App
 
-A application with **NextJS**, **NestJS** and, **PostgreSQL**.
+![Cover application](/assets/og.png)
+
+User management dashboard application built with **NextJS**, **NestJS** and, **PostgreSQL**. It provides an intuitive interface for administrators to manage users through a series of CRUD (Create, Read, Update, Delete) operations.
+
+The dashboard enables efficient and streamlined management of user data, making it an essential tool for system administrators.
 
 ## 📜 System Requirement
 
@@ -36,15 +43,15 @@ You can use the `.env.template` file to create your `.env` file. This file is us
 4. Determine the **environment variables** in the `.env` file. According to the `.env.template` initial file defined in the root `/` of the project
 5. Using the **Makefile** of the root `/` of the project, run the following command to initialize installing the dependencies of **frontend** and **backend** the application:
 
-    - ```bash
-      make app.init_dev
-      ```
+   - ```bash
+     make app.init_dev
+     ```
 
 6. Initialize the `@prisma/client` with the following command:
 
-    - ```bash
-      make prisma.generate
-      ```
+   - ```bash
+     make prisma.generate
+     ```
 
 Build the containers. Go to the next section [🐳 Running the app inside containers](#-running-the-app-inside-containers)
 
