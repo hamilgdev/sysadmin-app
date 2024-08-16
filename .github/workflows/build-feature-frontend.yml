@@ -146,14 +146,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.base_ref }}
 
-      # - name: 🧹 Delete feature branch
-      #   if: ${{ success() }}
-      #   run: |
-      #     git push origin --delete ${{ github.event.pull_request.head.ref }}
+      - name: 🧹 Delete feature branch
+        if: ${{ success() }}
+        run: |
+          git push origin --delete ${{ github.event.pull_request.head.ref }}
 
-      # - name: 📤 Push changes after delete
-      #   if: ${{ success() }}
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.base_ref }}
+      - name: 📤 Push changes after delete
+        if: ${{ success() }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.base_ref }}
