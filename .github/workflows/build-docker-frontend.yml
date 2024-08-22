@@ -41,7 +41,6 @@ jobs:
       - name: 🛠 Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ${{ github.workspace }}/provision/frontend/production
-          file: ./production/Dockerfile
+          context: ${{ github.workspace }}/provision/frontend/production/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
