@@ -3,6 +3,9 @@ name: Build Docker Image (Frontend CI)
 on:
   repository_dispatch:
     types: [build-docker-event]
+permissions:
+  packages: write
+  contents: read
 
 jobs:
   build-docker-image:
