@@ -139,14 +139,14 @@ jobs:
           git config --global user.name "WORKFLOW-USER"
           git merge --no-ff --verbose origin/${{ github.event.pull_request.head.ref }} -m "Merge pull request #${{ github.event.number }} from ${GITHUB_REPOSITORY}/${{ github.event.pull_request.head.ref}}"
 
-      - name: 📤 Push changes after merge
+      - name: ⬆️ Push changes after merge
         if: ${{ success() }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.base_ref }}
 
-      - name: 📦 Trigger deploy artifact
+      - name: 📦 Trigger publish artifact
         if: ${{ success() }}
         uses: peter-evans/repository-dispatch@v3
         with:

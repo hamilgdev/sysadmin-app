@@ -73,5 +73,11 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
           path: ${{ github.workspace }}/frontend/.next
 
-  # build-docker-image:
-  #   runs-on: ubuntu-22.04
+      - name: 📦 Trigger build docker
+        if: ${{ success() }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: build-docker-event
+          client-payload: '{ "base_branch": "${{ github.base_ref }}" }'
