@@ -37,10 +37,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - run: |
+          ls -la
 
       - name: 🛠 Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ${{ github.workspace }}/provision/frontend/production/Dockerfile
+          context: ${{ github.workspace }}/frontend
+          file: ${{ github.workspace }}/provision/frontend/production/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
