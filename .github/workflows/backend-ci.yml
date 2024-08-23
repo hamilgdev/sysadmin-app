@@ -2,11 +2,11 @@ name: Backend CI # Workflow name
 
 on: # Trigger on push and pull requests
   push:
-    branches: ['**'] # Trigger on all branches
+    branches: ['main'] # Trigger on all branches
     paths:
       - 'backend/**'
   pull_request:
-    branches: ['**']
+    branches: ['main']
     types: [opened, synchronize]
     paths:
       - 'backend/**'
@@ -55,7 +55,7 @@ jobs:
       - name: 🔍 Lint check
         run: |
           cd backend
-          npm run lint 
+          npm run lint
 
   build: # Job name
     runs-on: ubuntu-22.04
@@ -83,7 +83,7 @@ jobs:
           cd backend
           npm install
 
-      - name: 🏗️ Build Next.js application
+      - name: 🏗️ Build Nest.js application
         run: |
           cd backend
           npm run build
