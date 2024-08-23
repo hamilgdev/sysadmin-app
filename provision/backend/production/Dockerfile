@@ -6,8 +6,8 @@ FROM node:${NODE_VERSION}-alpine AS base
 ENV APP_HOME /usr/src/app
 WORKDIR $APP_HOME
 
-COPY package*.json ./
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Bundle app source
 COPY . .
