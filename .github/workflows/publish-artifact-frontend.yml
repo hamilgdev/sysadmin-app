@@ -2,7 +2,7 @@ name: Publish Artifact (Frontend CI)
 
 on:
   repository_dispatch:
-    types: [publish-artifact-event]
+    types: [publish-artifact-frontend-event]
 
 jobs:
   avoid_redundancy:
@@ -79,5 +79,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
-          event-type: build-docker-event
+          event-type: build-docker-frontend-event
           client-payload: '{ "base_branch": "${{ github.base_ref }}" }'

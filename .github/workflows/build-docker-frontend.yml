@@ -2,7 +2,7 @@ name: Build Docker Image (Frontend CI)
 
 on:
   repository_dispatch:
-    types: [build-docker-event]
+    types: [build-docker-frontend-event]
 permissions:
   packages: write
   contents: read
@@ -40,7 +40,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - run: |
           ls -la
 
