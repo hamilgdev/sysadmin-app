@@ -117,6 +117,15 @@ jobs:
           cd backend
           npm run test
 
+  build-artifact:
+    runs-on: ubuntu-22.04
+    needs: [run-tests]
+    if: ${{ success() }}
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
       - name: 📦 Trigger publish artifact
         if: ${{ success() }}
         uses: peter-evans/repository-dispatch@v3
